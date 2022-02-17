@@ -16,7 +16,7 @@ const logout = () => {
   signOut(auth).then(() => {
     store.currentUser = {}
     store.userData = {}
-    router.replace('/')
+    router.replace('/menu/login')
     menuController.close('main')
   })
 }

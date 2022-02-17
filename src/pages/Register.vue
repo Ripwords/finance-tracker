@@ -19,7 +19,6 @@ const register = () => {
       router.push('/menu/home')
     })
     .catch(error => {
-      console.log(error)
       switch (error.code) {
         case 'auth/invalid-email':
           errMessage.value = 'Invalid email address'

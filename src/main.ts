@@ -21,14 +21,8 @@ import '@ionic/vue/css/text-transformation.css'
 import '@ionic/vue/css/flex-utils.css'
 import '@ionic/vue/css/display.css'
 
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app"
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBmWNhyqv6NW3Vv09THGJ7EXjLw07OEUuU",
   authDomain: "finance-tracker-7450f.firebaseapp.com",
@@ -39,7 +33,6 @@ const firebaseConfig = {
   measurementId: "G-BLXE1RTZW2"
 }
 
-// Initialize Firebase
 initializeApp(firebaseConfig)
 
 const pinia = createPinia()

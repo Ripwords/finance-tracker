@@ -1,11 +1,11 @@
-import { createWebHashHistory, createRouter } from '@ionic/vue-router'
+import { createWebHistory, createRouter } from '@ionic/vue-router'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/menu/login'
+    redirect: '/menu/home'
   },
   {
     path: '/:pathMatch(.*)',
@@ -51,14 +51,16 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes
 })
 
 router.beforeEach(async (to, from, next) => {
   const getUser = () => {
     return new Promise((resolve, reject) => {
-      const removeListener = onAuthStateChanged(getAuth(), user => {
+      const removeListener = onAuthStateChanged(
+        getAuth(),
+        user => {
         removeListener()
         resolve(user)
       },
@@ -68,7 +70,7 @@ router.beforeEach(async (to, from, next) => {
   }
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (await getUser()) {
-      if (to.path === '/menu/login') {
+      if (to.path == '/menu/login') {
         next({
           path: '/menu/home'
         })

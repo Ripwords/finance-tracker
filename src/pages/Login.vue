@@ -2,7 +2,7 @@
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { useRouter } from 'vue-router'
 import { signInGoogle } from '../functions/googleSignIn'
-import { updateUser } from '../functions/utility';
+import { updateUser } from '../functions/utility'
 
 const email = ref()
 const password = ref()
@@ -58,7 +58,7 @@ const signIn = () => {
         <p v-if="errMessage">{{ errMessage }}</p>
         <ion-item>
           <ion-button @click="signIn()">Login</ion-button>
-          <ion-button @click="errMessage = signInGoogle(router)">Sign In with Google</ion-button>
+          <ion-button @click="errMessage = signInGoogle()">Sign In with Google</ion-button>
           <ion-button @click="router.replace('/menu/register')">Sign Up</ion-button>
         </ion-item>
       </ion-card>
