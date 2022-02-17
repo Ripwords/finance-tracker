@@ -2,16 +2,21 @@
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 import { useRouter } from 'vue-router'
 import { signInGoogle } from '../functions/googleSignIn'
+import { hydratePiniaFromFirestore } from '../functions/hydratePinia'
+import { mainStore } from '../store'
 
 const email = ref()
 const password = ref()
+const store = mainStore()
 const router = useRouter()
 const errMessage = ref()
 
 const register = () => {
   createUserWithEmailAndPassword(getAuth(), email.value, password.value)
-    .then(() => {
-      router.push('/main')
+    .then((result) => {
+      hydratePiniaFromFirestore()
+      store.currentUser = result.user
+      router.push('/menu/home')
     })
     .catch(error => {
       console.log(error)
@@ -36,12 +41,21 @@ const register = () => {
 <template>
   <ion-page>
     <ion-content>
-      <h1>Create an Account</h1>
-      <ion-input type="text" placeholder="Email" v-model="email"></ion-input>
-      <ion-input type="password" placeholder="Password" v-model="password"></ion-input>
-      <p v-if="errMessage">{{ errMessage }}</p>
-      <ion-button @click="register()">Register</ion-button>
-      <ion-button @click="signInGoogle(router)">Sign In with Google</ion-button>
+      <Header title="Register" /> 
+      <ion-card class="ion-padding">
+        <ion-item>
+          <ion-input type="text" placeholder="Email" v-model="email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input type="password" placeholder="Password" v-model="password"></ion-input>
+        </ion-item>
+        <p v-if="errMessage">{{ errMessage }}</p>
+        <ion-item>
+          <ion-button @click="register()">Register</ion-button>
+          <ion-button @click="signInGoogle(router)">Sign In with Google</ion-button>
+          <ion-button @click="router.replace('/menu/login')">Sign In</ion-button>
+        </ion-item>
+      </ion-card>
     </ion-content>
   </ion-page>
 </template>

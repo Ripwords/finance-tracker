@@ -1,42 +1,23 @@
-<script lang="ts" setup>
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
-const isLoggedIn = ref(false)
-let auth: any
-const logout = () => {
-  signOut(auth).then(() => {
-    router.push('/')
-  })
-}
-
-
-onMounted(() => {
-  auth = getAuth()
-  onAuthStateChanged(auth, user => {
-    isLoggedIn.value = user ? true : false
-  })
-  
-})
-</script>
-
 <template>
   <ion-app>
-    <ion-toolbar>
-      <nav class="flex justify-center">
-        <ion-button router-link="/home">Home</ion-button>
-        <ion-button v-if="isLoggedIn" router-link="/main">Main</ion-button>
-        <ion-button v-if="!isLoggedIn" router-link="/register">Register</ion-button>
-        <ion-button v-if="!isLoggedIn" router-link="/login">Login</ion-button>
-        <ion-button v-if="isLoggedIn" @click="logout()">Logout</ion-button>
-      </nav>
-    </ion-toolbar>
-      <ion-router-outlet></ion-router-outlet>
+    <ion-router-outlet></ion-router-outlet>
   </ion-app>
 </template>
 
 <style>
+.noSelect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.noSelect:hover {
+  color: var(--ion-color-primary);
+}
+
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
 

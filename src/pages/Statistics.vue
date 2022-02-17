@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-content>
-      Hello World!
+      <Header title="Statistics" /> 
     </ion-content>
   </ion-page>
 </template>

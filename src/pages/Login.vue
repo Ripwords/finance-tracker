@@ -2,6 +2,7 @@
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { useRouter } from 'vue-router'
 import { signInGoogle } from '../functions/googleSignIn'
+import { updateUser } from '../functions/utility';
 
 const email = ref()
 const password = ref()
@@ -11,7 +12,8 @@ const router = useRouter()
 const signIn = () => {
   signInWithEmailAndPassword(getAuth(), email.value, password.value)
     .then(() => {
-      router.push('/main')
+      updateUser()
+      router.push('/menu/home')
     })
     .catch(error => {
       switch (error.code) {
@@ -35,7 +37,7 @@ const signIn = () => {
           }
           break
         default:
-          errMessage.value = error.message
+          errMessage.value = null
       }
     }
   )
@@ -45,12 +47,21 @@ const signIn = () => {
 <template>
   <ion-page>
     <ion-content>
-      <h1>Sign In</h1>
-      <ion-input type="text" placeholder="Email" v-model="email"></ion-input>
-      <ion-input type="password" placeholder="Password" v-model="password"></ion-input>
-      <p v-if="errMessage">{{ errMessage }}</p>
-      <ion-button @click="signIn()">Login</ion-button>
-      <ion-button @click="signInGoogle(router)">Sign In with Google</ion-button>
+      <Header title="Sign In" /> 
+      <ion-card class="ion-padding">
+        <ion-item>
+          <ion-input type="text" placeholder="Email" v-model="email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input type="password" placeholder="Password" v-model="password"></ion-input>
+        </ion-item>
+        <p v-if="errMessage">{{ errMessage }}</p>
+        <ion-item>
+          <ion-button @click="signIn()">Login</ion-button>
+          <ion-button @click="errMessage = signInGoogle(router)">Sign In with Google</ion-button>
+          <ion-button @click="router.replace('/menu/register')">Sign Up</ion-button>
+        </ion-item>
+      </ion-card>
     </ion-content>
   </ion-page>
 </template>

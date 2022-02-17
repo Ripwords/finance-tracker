@@ -6,6 +6,7 @@ specifiers:
   '@ionic/vue-router': 6.0.8
   '@vitejs/plugin-vue': 2.2.0
   '@vueuse/core': 7.6.2
+  chart.js: ^3.7.1
   firebase: ^9.6.6
   pinia: 2.0.11
   typescript: ^4.4.3
@@ -24,6 +25,7 @@ dependencies:
   '@ionic/vue': 6.0.8
   '@ionic/vue-router': 6.0.8
   '@vueuse/core': 7.6.2_vue@3.2.31
+  chart.js: 3.7.1
   firebase: 9.6.6
   pinia: 2.0.11_typescript@4.4.4+vue@3.2.31
   vue: 3.2.31
@@ -2286,6 +2288,10 @@ packages:
     dependencies:
       is-regex: 1.1.4
     dev: true
+
+  /chart.js/3.7.1:
+    resolution: {integrity: sha512-8knRegQLFnPQAheZV8MjxIXc5gQEfDFD897BJgv/klO/vtIyFFmgMXrNfgrXpbTr/XbTturxRgxIXx/Y+ASJBA==}
+    dev: false
 
   /chokidar/3.5.2:
     resolution: {integrity: sha512-ekGhOnNVPgT77r4K/U3GDhu+FQ2S8TnK/s2KbIGXi0SZWuwkZ2QNyfWdZW+TVfn84DpEP7rLeCt2UI6bJ8GwbQ==}

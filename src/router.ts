@@ -5,30 +5,48 @@ import { RouteRecordRaw } from 'vue-router'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/menu/login'
   },
   {
     path: '/:pathMatch(.*)',
-    redirect: '/home'
+    redirect: '/menu/login'
   },
   {
-    path: '/home',
-    component: () => import('./pages/Home.vue')
-  },
-  {
-    path: '/main',
-    component: () => import('./pages/Main.vue'),
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/register',
-    component: () => import('./pages/Register.vue')
-  },
-  {
-    path: '/login',
-    component: () => import('./pages/Login.vue')
+    path: '/menu',
+    component: () => import('./pages/Menu.vue'),
+    children: [
+      {
+        path: 'home',
+        component: () => import('./pages/Home.vue'),
+        meta: {
+          requiresAuth: true
+        }
+      },
+      {
+        path: 'register',
+        component: () => import('./pages/Register.vue')
+      },
+      {
+        path: 'login',
+        component: () => import('./pages/Login.vue')
+      },
+      {
+        path: 'statistics',
+        component: () => import('./pages/Statistics.vue'),
+      },
+      {
+        path: 'categories',
+        component: () => import('./pages/Categories.vue'),
+      },
+      {
+        path: 'accounts',
+        component: () => import('./pages/Accounts.vue'),
+      },
+      {
+        path: 'settings',
+        component: () => import('./pages/Settings.vue'),
+      },
+    ]
   }
 ]
 
@@ -41,20 +59,25 @@ router.beforeEach(async (to, from, next) => {
   const getUser = () => {
     return new Promise((resolve, reject) => {
       const removeListener = onAuthStateChanged(getAuth(), user => {
-          removeListener()
-          resolve(user)
-        },
+        removeListener()
+        resolve(user)
+      },
         reject
       )
     })
   }
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (await getUser()) {
-      next()
+      if (to.path === '/menu/login') {
+        next({
+          path: '/menu/home'
+        })
+      } else {
+        next()
+      }
     } else {
-      alert("You must be logged in to view this page.")
       next({
-        path: '/home'
+        path: '/menu/login'
       })
     }
   } else {
