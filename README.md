@@ -1,1 +1,1 @@
-# Ionic Vue Vite Template
+# Finance Tracker
