@@ -28,8 +28,6 @@ const signIn = () => {
   )
 }
 
-
-
 watch(enter, () => {
   if (email.value && password.value) {
     signIn()

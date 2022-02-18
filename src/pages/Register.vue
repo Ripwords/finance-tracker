@@ -2,13 +2,14 @@
 import { useRouter } from 'vue-router'
 import { useMagicKeys } from '@vueuse/core'
 import { signInGoogle } from '../functions/googleSignIn'
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'
 import { errorHandler, updateUser, openToast } from '../functions/utility'
 
 const email = ref('')
 const password = ref('')
 const passwordConfirm = ref('')
 const router = useRouter()
+const err = ref(false)
 const { enter } = useMagicKeys()
 const seePassword = ref(false)
 
@@ -18,21 +19,36 @@ const reset = () => {
   passwordConfirm.value = ''
 }
 
+const verifyEmail = async (user: any) => {
+  if (import.meta.env.PROD){
+    await sendEmailVerification(user, {
+      url: 'https://fitracker.netlify.app/'
+    })
+  } else if (import.meta.env.DEV) {
+    await sendEmailVerification(user, {
+      url: 'http://localhost:3000/'
+    })
+  }
+}
+
 const register = async () => {
   if (email.value == '' || password.value == '' || passwordConfirm.value == '') {
     await openToast('Please fill in all fields')
   } else if (password.value !== passwordConfirm.value) {
     await openToast('Passwords do not match')
   } else {
-    createUserWithEmailAndPassword(getAuth(), email.value, password.value)
-      .then(() => {
-        updateUser(router, true)
-      })
-      .catch(error => {
-        reset()
-        openToast(errorHandler(error.code))
+    try {
+      const created = await createUserWithEmailAndPassword(getAuth(), email.value, password.value)
+      if (getAuth().currentUser && created) {
+        await openToast('Please check your email for a verification link', 'success')
+        await verifyEmail(getAuth().currentUser)
+      } else {
+        return
       }
-    )
+    } catch (error: any) {
+      await openToast(errorHandler(error.code))
+    }
+    reset()
   }
 }
 
@@ -63,7 +79,7 @@ updateUser(router)
             </div>
           </ion-item>
           <ion-item>
-            <ion-input v-if="!seePassword" type="password" placeholder="Confirm Password" v-model="password"></ion-input>
+            <ion-input v-if="!seePassword" type="password" placeholder="Confirm Password" v-model="passwordConfirm"></ion-input>
             <ion-input v-else type="text" placeholder="Confirm Password" v-model="passwordConfirm"></ion-input>
             <div @click="seePassword = !seePassword">
               <i-carbon:view v-if="!seePassword"></i-carbon:view>

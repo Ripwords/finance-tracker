@@ -7,18 +7,18 @@ import { toastController } from '@ionic/vue'
 const store = mainStore()
 
 export const updateUser = async (router?: Router, redirect?: boolean) => {
-  if (router) {
-    const result = await getRedirectResult(getAuth())
-    if (result?.user) {
-      router.replace('/menu/home')
-    } else if (redirect) {
-      router.replace('/menu/home')
-    }
-  }
   const auth = getAuth().currentUser
   if (auth) {
     store.currentUser = auth
     hydratePiniaFromFirestore()
+  }
+  if (router) {
+    const result = await getRedirectResult(getAuth())
+    if (result?.user) {
+      await router.replace('/menu/home')
+    } else if (redirect) {
+      router.replace('/menu/home')
+    }
   }
 }
 
@@ -44,12 +44,12 @@ export const errorHandler = (error: string) => {
   }
 }
 
-export const openToast = async (msg: string | null) => {
+export const openToast = async (msg: string | null, color: string = 'danger') => {
   if (msg) {
     const toast = await toastController.create({
       message: msg,
       duration: 2500,
-      color: 'danger'
+      color: color
     })
     toast.present()
   }

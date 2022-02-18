@@ -3,6 +3,7 @@ import { mainStore } from '../store'
 import { menuController } from '@ionic/vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Auth, getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
+import { updateUser } from '../functions/utility';
 
 let auth: Auth
 const route = useRoute()
@@ -27,6 +28,7 @@ onMounted(() => {
   onAuthStateChanged(auth, user => {
     isLoggedIn.value = user ? true : false
   })
+  updateUser()
 })
 </script>
 
