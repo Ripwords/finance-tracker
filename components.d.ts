@@ -10,6 +10,8 @@ declare module 'vue' {
     'ICarbon:login': typeof import('~icons/carbon/login')['default']
     'ICarbon:logoGoogle': typeof import('~icons/carbon/logo-google')['default']
     'ICarbon:money': typeof import('~icons/carbon/money')['default']
+    'ICarbon:view': typeof import('~icons/carbon/view')['default']
+    'ICarbon:viewOff': typeof import('~icons/carbon/view-off')['default']
     'IIon:menu': typeof import('~icons/ion/menu')['default']
     'ILogos:ionicIcon': typeof import('~icons/logos/ionic-icon')['default']
     'ILogos:vitejs': typeof import('~icons/logos/vitejs')['default']

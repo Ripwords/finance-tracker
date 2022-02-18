@@ -40,9 +40,6 @@ export const errorHandler = (error: string) => {
     case 'auth/weak-password':
       return 'Password is too weak'
     default:
-      if (!error.startsWith('auth/')) {
-        return null
-      }
       return 'Unknown error'
   }
 }

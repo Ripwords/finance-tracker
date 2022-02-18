@@ -7,9 +7,14 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 
 const email = ref()
 const password = ref()
-const emailInput = ref<any>(null)
+const seePassword = ref(false)
 const router = useRouter()
 const { enter } = useMagicKeys()
+
+const reset = () => {
+  email.value
+  password.value
+}
 
 const signIn = () => {
   signInWithEmailAndPassword(getAuth(), email.value, password.value)
@@ -17,8 +22,7 @@ const signIn = () => {
       updateUser(router, true)
     })
     .catch(error => {
-      email.value = ''
-      password.value = ''
+      reset()
       openToast(errorHandler(error.code))
     }
   )
@@ -41,11 +45,16 @@ updateUser(router)
       <div class="flex justify-center mt-5">
         <ion-card class="ion-padding w-[500px] children:my-2">
           <Header title="Sign In" /> 
-          <ion-item ref="emailInput">
+          <ion-item>
             <ion-input type="text" placeholder="Email" v-model="email"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-input type="password" placeholder="Password" v-model="password"></ion-input>
+            <ion-input v-if="!seePassword" type="password" placeholder="Password" v-model="password"></ion-input>
+            <ion-input v-else type="text" placeholder="Password" v-model="password"></ion-input>
+            <div @click="seePassword = !seePassword">
+              <i-carbon:view v-if="!seePassword"></i-carbon:view>
+              <i-carbon:view-off v-else></i-carbon:view-off>
+            </div>
           </ion-item>
           <div class="flex justify-center">
             <ion-button @click="signIn()">Login</ion-button>
