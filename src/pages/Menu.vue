@@ -3,7 +3,6 @@ import { mainStore } from '../store'
 import { menuController } from '@ionic/vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Auth, getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
-import { updateUser } from '../functions/utility'
 
 let auth: Auth
 const route = useRoute()
@@ -16,12 +15,12 @@ const logout = () => {
   signOut(auth).then(() => {
     store.currentUser = {}
     store.userData = {}
-    router.replace('/menu/login')
+    router.push('/')
+    window.location.reload()
     menuController.close('main')
   })
 }
 
-updateUser(router)
 
 onMounted(() => {
   auth = getAuth()
@@ -45,58 +44,39 @@ onMounted(() => {
         <ion-list>
           <ion-menu-toggle auto-hide="false" class="children:noSelect">
             <ion-item
-              v-if="isLoggedIn"
               :class="{ active: isActive('/menu/home') }"
               @click="router.replace('/menu/home')"
             >
               <i-carbon:currency></i-carbon:currency>&nbsp;&nbsp;Expenses
             </ion-item>
             <ion-item
-              v-if="isLoggedIn"
               :class="{ active: isActive('/menu/statistics') }"
               @click="router.replace('/menu/statistics')"
             >
               <i-carbon:currency></i-carbon:currency>&nbsp;&nbsp;Statistics
             </ion-item>
             <ion-item
-              v-if="isLoggedIn"
               :class="{ active: isActive('/menu/categories') }"
               @click="router.replace('/menu/categories')"
             >
               <i-carbon:currency></i-carbon:currency>&nbsp;&nbsp;Categories
             </ion-item>
             <ion-item
-              v-if="isLoggedIn"
               :class="{ active: isActive('/menu/accounts') }"
               @click="router.replace('/menu/accounts')"
             >
               <i-carbon:currency></i-carbon:currency>&nbsp;&nbsp;Accounts
             </ion-item>
             <ion-item
-              v-if="isLoggedIn"
               :class="{ active: isActive('/menu/settings') }"
               @click="router.replace('/menu/settings')"
             >
               <i-carbon:currency></i-carbon:currency>&nbsp;&nbsp;Settings
             </ion-item>
-            <div v-else>
-              <ion-item 
-                @click="router.replace('/menu/login')"
-                :class="{ active: isActive('/menu/login') }"
-              >
-                <i-carbon:login></i-carbon:login>&nbsp;&nbsp;Login
-              </ion-item>
-              <ion-item 
-                @click="router.replace('/menu/register')"
-                :class="{ active: isActive('/menu/register') }"
-              >
-                <i-carbon:login></i-carbon:login>&nbsp;&nbsp;Register
-              </ion-item>
-            </div>
           </ion-menu-toggle>
         </ion-list>
       </ion-content>
-      <ion-footer mode="md" v-if="isLoggedIn">
+      <ion-footer mode="md">
         <ion-toolbar>
           <ion-item>
             <ion-button @click="logout">Logout</ion-button>

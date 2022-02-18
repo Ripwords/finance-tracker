@@ -1,8 +1,5 @@
 <script lang="ts" setup>
 import IconNames from '../components/Icons'
-// import { mainStore } from '../store'
-
-// const store = mainStore()
 </script>
 
 <template>
@@ -17,7 +14,6 @@ import IconNames from '../components/Icons'
           </div>
           <IconNames />
         </ion-label>
-        <!-- {{ store.currentUser }} -->
     </ion-content>
   </ion-page>
 </template>

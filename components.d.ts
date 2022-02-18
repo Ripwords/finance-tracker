@@ -8,6 +8,7 @@ declare module 'vue' {
     Header: typeof import('./src/components/Header.vue')['default']
     'ICarbon:currency': typeof import('~icons/carbon/currency')['default']
     'ICarbon:login': typeof import('~icons/carbon/login')['default']
+    'ICarbon:logoGoogle': typeof import('~icons/carbon/logo-google')['default']
     'ICarbon:money': typeof import('~icons/carbon/money')['default']
     'IIon:menu': typeof import('~icons/ion/menu')['default']
     'ILogos:ionicIcon': typeof import('~icons/logos/ionic-icon')['default']

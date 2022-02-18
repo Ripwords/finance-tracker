@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
+import { useMagicKeys } from '@vueuse/core'
 import { updateUser } from '../functions/utility'
 import { signInGoogle } from '../functions/googleSignIn'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
@@ -8,12 +9,12 @@ const email = ref()
 const password = ref()
 const errMessage = ref()
 const router = useRouter()
+const { enter } = useMagicKeys()
 
 const signIn = () => {
   signInWithEmailAndPassword(getAuth(), email.value, password.value)
     .then(() => {
-      updateUser()
-      router.push('/menu/home')
+      updateUser(router, true)
     })
     .catch(error => {
       switch (error.code) {
@@ -42,26 +43,39 @@ const signIn = () => {
     }
   )
 }
+
+watch(enter, () => {
+  if (email.value && password.value) {
+    signIn()
+  }
+})
+
+updateUser(router)
 </script>
 
 <template>
   <ion-page>
     <ion-content>
-      <Header title="Sign In" /> 
-      <ion-card class="ion-padding">
-        <ion-item>
-          <ion-input type="text" placeholder="Email" v-model="email"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-input type="password" placeholder="Password" v-model="password"></ion-input>
-        </ion-item>
-        <p v-if="errMessage">{{ errMessage }}</p>
-        <ion-item>
-          <ion-button @click="signIn()">Login</ion-button>
-          <ion-button @click="errMessage = signInGoogle()">Sign In with Google</ion-button>
-          <ion-button @click="router.replace('/menu/register')">Sign Up</ion-button>
-        </ion-item>
-      </ion-card>
+      <div class="flex justify-center mt-5">
+        <ion-card class="ion-padding w-[500px]">
+          <Header title="Sign In" /> 
+          <ion-item>
+            <ion-input type="text" placeholder="Email" v-model="email"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input type="password" placeholder="Password" v-model="password"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-button @click="signIn()">Login</ion-button>
+            <ion-button @click="errMessage = signInGoogle()">&nbsp;<i-carbon:logo-google></i-carbon:logo-google>&nbsp;</ion-button>
+          </ion-item>
+          <div class="flex justify-end mt-3 text-size-[12px]">
+            <p>Don't have an account?
+              <button @click="router.replace('/register')"><a>Register here</a></button>
+            </p>
+          </div>
+        </ion-card>
+      </div>
     </ion-content>
   </ion-page>
 </template>

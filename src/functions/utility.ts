@@ -5,10 +5,12 @@ import { hydratePiniaFromFirestore } from './hydratePinia'
 
 const store = mainStore()
 
-export const updateUser = async (router?: Router) => {
+export const updateUser = async (router?: Router, redirect?: boolean) => {
   if (router) {
     const result = await getRedirectResult(getAuth())
     if (result?.user) {
+      router.replace('/menu/home')
+    } else if (redirect) {
       router.replace('/menu/home')
     }
   }

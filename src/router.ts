@@ -8,27 +8,27 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/menu/home'
   },
   {
+    path: '/login',
+    component: () => import('./pages/Login.vue')
+  },
+  {
+    path: '/register',
+    component: () => import('./pages/Register.vue')
+  },
+  {
     path: '/:pathMatch(.*)',
-    redirect: '/menu/login'
+    redirect: '/login'
   },
   {
     path: '/menu',
     component: () => import('./pages/Menu.vue'),
+    meta: {
+      requiresAuth: true
+    },
     children: [
       {
         path: 'home',
-        component: () => import('./pages/Home.vue'),
-        meta: {
-          requiresAuth: true
-        }
-      },
-      {
-        path: 'register',
-        component: () => import('./pages/Register.vue')
-      },
-      {
-        path: 'login',
-        component: () => import('./pages/Login.vue')
+        component: () => import('./pages/Home.vue')
       },
       {
         path: 'statistics',
@@ -70,7 +70,7 @@ router.beforeEach(async (to, from, next) => {
   }
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (await getUser()) {
-      if (to.path == '/menu/login') {
+      if (to.path == '/login') {
         next({
           path: '/menu/home'
         })
@@ -79,7 +79,7 @@ router.beforeEach(async (to, from, next) => {
       }
     } else {
       next({
-        path: '/menu/login'
+        path: '/login'
       })
     }
   } else {

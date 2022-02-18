@@ -1,5 +1,7 @@
 <template>
   <ion-page>
-    <Header title="Accounts" />
+    <ion-content>
+      <Header title="Accounts" />
+    </ion-content>
   </ion-page> 
 </template>
