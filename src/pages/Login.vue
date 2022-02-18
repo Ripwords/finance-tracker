@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { useRouter } from 'vue-router'
-import { signInGoogle } from '../functions/googleSignIn'
 import { updateUser } from '../functions/utility'
+import { signInGoogle } from '../functions/googleSignIn'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 
 const email = ref()
 const password = ref()

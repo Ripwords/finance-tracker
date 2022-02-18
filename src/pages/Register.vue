@@ -1,21 +1,18 @@
 <script lang="ts" setup>
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 import { useRouter } from 'vue-router'
+import { updateUser } from '../functions/utility'
 import { signInGoogle } from '../functions/googleSignIn'
-import { hydratePiniaFromFirestore } from '../functions/hydratePinia'
-import { mainStore } from '../store'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 
 const email = ref()
 const password = ref()
-const store = mainStore()
 const router = useRouter()
 const errMessage = ref()
 
 const register = () => {
   createUserWithEmailAndPassword(getAuth(), email.value, password.value)
-    .then((result) => {
-      hydratePiniaFromFirestore()
-      store.currentUser = result.user
+    .then(() => {
+      updateUser()
       router.push('/menu/home')
     })
     .catch(error => {
@@ -51,7 +48,7 @@ const register = () => {
         <p v-if="errMessage">{{ errMessage }}</p>
         <ion-item>
           <ion-button @click="register()">Register</ion-button>
-          <ion-button @click="signInGoogle(router)">Sign In with Google</ion-button>
+          <ion-button @click="signInGoogle()">Sign In with Google</ion-button>
           <ion-button @click="router.replace('/menu/login')">Sign In</ion-button>
         </ion-item>
       </ion-card>

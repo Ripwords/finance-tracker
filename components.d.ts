@@ -32,6 +32,7 @@ declare module 'vue' {
     IonSplitPane: typeof import('@ionic/vue')['IonSplitPane']
     IonTitle: typeof import('@ionic/vue')['IonTitle']
     IonToolbar: typeof import('@ionic/vue')['IonToolbar']
+    ReloadPrompt: typeof import('./src/components/ReloadPrompt.vue')['default']
   }
 }
 

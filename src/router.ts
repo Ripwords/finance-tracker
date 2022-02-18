@@ -1,6 +1,6 @@
-import { createWebHistory, createRouter } from '@ionic/vue-router'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { RouteRecordRaw } from 'vue-router'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { createWebHistory, createRouter } from '@ionic/vue-router'
 
 const routes: Array<RouteRecordRaw> = [
   {

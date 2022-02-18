@@ -1,5 +1,5 @@
-import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore'
 import { mainStore } from '../store'
+import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore'
 
 const store = mainStore()
 

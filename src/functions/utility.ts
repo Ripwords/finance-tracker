@@ -1,6 +1,6 @@
-import { getAuth, getRedirectResult } from 'firebase/auth'
 import { Router } from 'vue-router'
 import { mainStore } from '../store'
+import { getAuth, getRedirectResult } from 'firebase/auth'
 import { hydratePiniaFromFirestore } from './hydratePinia'
 
 const store = mainStore()
