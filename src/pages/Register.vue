@@ -2,14 +2,14 @@
 import { useRouter } from 'vue-router'
 import { useMagicKeys } from '@vueuse/core'
 import { signInGoogle } from '../functions/googleSignIn'
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'
 import { errorHandler, updateUser, openToast } from '../functions/utility'
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth'
 
 const email = ref('')
 const password = ref('')
 const passwordConfirm = ref('')
+const loading = ref(false)
 const router = useRouter()
-const err = ref(false)
 const { enter } = useMagicKeys()
 const seePassword = ref(false)
 
@@ -17,18 +17,13 @@ const reset = () => {
   email.value = ''
   password.value = ''
   passwordConfirm.value = ''
+  loading.value = false
 }
 
 const verifyEmail = async (user: any) => {
-  if (import.meta.env.PROD){
-    await sendEmailVerification(user, {
-      url: 'https://fitracker.netlify.app/'
-    })
-  } else if (import.meta.env.DEV) {
-    await sendEmailVerification(user, {
-      url: 'http://localhost:3000/'
-    })
-  }
+  await sendEmailVerification(user, {
+    url: import.meta.env.PROD ? 'https://fitracker.netlify.app/' : 'http://localhost:3000/'
+  })
 }
 
 const register = async () => {
@@ -38,6 +33,7 @@ const register = async () => {
     await openToast('Passwords do not match')
   } else {
     try {
+      loading.value = true
       const created = await createUserWithEmailAndPassword(getAuth(), email.value, password.value)
       if (getAuth().currentUser && created) {
         await openToast('Please check your email for a verification link', 'success')
@@ -67,6 +63,7 @@ updateUser(router)
       <div class="flex justify-center mt-5">
         <ion-card class="ion-padding w-[500px] children:my-2">
           <Header title="Register" /> 
+          <ion-progress-bar v-if="loading" type="indeterminate"></ion-progress-bar>
           <ion-item>
             <ion-input type="text" placeholder="Email" v-model="email"></ion-input>
           </ion-item>
@@ -87,7 +84,12 @@ updateUser(router)
             </div>
           </ion-item>
           <div class="flex justify-center">
-            <ion-button @click="register()">Register</ion-button>
+            <ion-button @click="register()">
+              <div v-if="!loading" class="w-[80px]">Register</div>
+              <div v-else class="w-[80px]">
+                <ion-spinner name="crescent"></ion-spinner>
+              </div>
+            </ion-button>
             <ion-button @click="signInGoogle()">&nbsp;<i-carbon:logo-google></i-carbon:logo-google>&nbsp;</ion-button>
           </div>
           <div class="flex justify-end mt-3 text-size-[12px]">

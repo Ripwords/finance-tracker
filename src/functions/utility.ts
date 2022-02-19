@@ -1,12 +1,12 @@
 import { Router } from 'vue-router'
 import { mainStore } from '../store'
+import { toastController } from '@ionic/vue'
 import { getAuth, getRedirectResult } from 'firebase/auth'
 import { hydratePiniaFromFirestore } from './hydratePinia'
-import { toastController } from '@ionic/vue'
 
 const store = mainStore()
 
-export const updateUser = async (router?: Router, redirect?: boolean) => {
+export const updateUser = async (router?: Router) => {
   const auth = getAuth().currentUser
   if (auth) {
     store.currentUser = auth
@@ -16,8 +16,6 @@ export const updateUser = async (router?: Router, redirect?: boolean) => {
     const result = await getRedirectResult(getAuth())
     if (result?.user) {
       await router.replace('/menu/home')
-    } else if (redirect) {
-      router.replace('/menu/home')
     }
   }
 }

@@ -2,24 +2,28 @@
 import { useRouter } from 'vue-router'
 import { useMagicKeys } from '@vueuse/core'
 import { signInGoogle } from '../functions/googleSignIn'
-import { errorHandler, updateUser, openToast } from '../functions/utility'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { errorHandler, updateUser, openToast } from '../functions/utility'
 
-const email = ref()
-const password = ref()
-const seePassword = ref(false)
+const email = ref('')
+const password = ref('')
 const router = useRouter()
+const loading = ref(false)
+const seePassword = ref(false)
 const { enter } = useMagicKeys()
 
 const reset = () => {
-  email.value
-  password.value
+  email.value = ''
+  password.value = ''
+  loading.value = false
 }
 
-const signIn = () => {
+const signIn = async () => {
+  loading.value = true
   signInWithEmailAndPassword(getAuth(), email.value, password.value)
-    .then(() => {
-      updateUser(router, true)
+    .then(async () => {
+      await updateUser(router)
+      await router.replace('/menu/home')
     })
     .catch(error => {
       reset()
@@ -43,6 +47,7 @@ updateUser(router)
       <div class="flex justify-center mt-5">
         <ion-card class="ion-padding w-[500px] children:my-2">
           <Header title="Sign In" /> 
+          <ion-progress-bar v-if="loading" type="indeterminate"></ion-progress-bar>
           <ion-item>
             <ion-input type="text" placeholder="Email" v-model="email"></ion-input>
           </ion-item>
@@ -55,8 +60,11 @@ updateUser(router)
             </div>
           </ion-item>
           <div class="flex justify-center">
-            <ion-button @click="signIn()">Login</ion-button>
-            <ion-button @click="signInGoogle()">&nbsp;<i-carbon:logo-google></i-carbon:logo-google>&nbsp;</ion-button>
+            <ion-button @click="signIn()">
+              <div v-if="!loading" class="w-[50px]">Login</div>
+              <div class="w-[50px]" v-else><ion-spinner name="crescent"></ion-spinner></div>
+            </ion-button>
+            <ion-button @click="signInGoogle(); loading = true">&nbsp;<i-carbon:logo-google></i-carbon:logo-google>&nbsp;</ion-button>
           </div>
           <div class="flex justify-end mt-3 text-size-[12px]">
             <p>Don't have an account?
