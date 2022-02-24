@@ -2,7 +2,7 @@
 import { useRouter } from 'vue-router'
 import { useMagicKeys } from '@vueuse/core'
 import { signInGoogle } from '../functions/googleSignIn'
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
+import { getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth'
 import { errorHandler, updateUser, openToast } from '../functions/utility'
 
 const email = ref('')
@@ -28,7 +28,7 @@ const signIn = async () => {
     .catch(error => {
       reset()
       openToast(errorHandler(error.code))
-    }
+    }			                  
   )
 }
 
@@ -69,6 +69,11 @@ updateUser(router)
           <div class="flex justify-end mt-3 text-size-[12px]">
             <p>Don't have an account?
               <button @click="router.replace('/register')"><a>Register here</a></button>
+            </p>
+          </div>
+          <div class="flex justify-end mt-3 text-size-[12px]">
+            <p>
+              <button @click="router.push('/forgotpassword')"><a>Forgot password?</a></button>
             </p>
           </div>
         </ion-card>

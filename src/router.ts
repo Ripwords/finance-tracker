@@ -16,6 +16,10 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('./pages/Register.vue')
   },
   {
+    path: '/forgotpassword',
+    component: () => import('./pages/ForgotPassword.vue')
+  },
+  {
     path: '/:pathMatch(.*)',
     redirect: '/login'
   },
